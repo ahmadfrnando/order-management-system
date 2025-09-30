@@ -361,11 +361,11 @@ function submitOrder() {
                         }}</span
                     >
                 </div>
-                <PrimaryButton
+               <PrimaryButton
                     @click="addToCart(coffee)"
                     id="coffee"
                     class="w-full flex justify-center"
-                    >Add to Cart</PrimaryButton
+                    > <i class="fas fa-plus mr-2"></i> Pilih Menu</PrimaryButton
                 >
             </div>
         </div>
@@ -409,7 +409,7 @@ function submitOrder() {
                     @click="addToCart(drink)"
                     id="coffee"
                     class="w-full flex justify-center"
-                    >Add to Cart</PrimaryButton
+                    > <i class="fas fa-plus mr-2"></i> Pilih Menu</PrimaryButton
                 >
             </div>
         </div>

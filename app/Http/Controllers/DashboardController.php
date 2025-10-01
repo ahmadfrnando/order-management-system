@@ -14,7 +14,7 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {   
-        $pesanan = Pesanan::with('pesanan_detail.menu')->get();
+        $pesanan = Pesanan::with('pesanan_detail.menu')->where('is_done', false)->get();
         return Inertia::render('Dashboard', [
             'pesanan' => $pesanan
         ]);

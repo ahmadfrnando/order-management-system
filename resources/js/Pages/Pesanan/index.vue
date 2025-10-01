@@ -1,111 +1,177 @@
 <script setup>
 import { Head, Link, router } from "@inertiajs/vue3";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { ref } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
 
 const props = defineProps({
-    pesanan: {
-        type: Array,
-        required: true,
-    },
+    pesanan: Object,
 });
 
-const pesanan = ref(props.pesanan);
+// bikin salinan biar bisa dimodifikasi di frontend
+// const pesananLocal = ref({ ...props.pesanan });
+const pesananLocal = ref(JSON.parse(JSON.stringify(props.pesanan)))
+const isLoading = ref(false)
+console.log(pesananLocal);
 
-// function buatPesanan(id) {
-//     router.patch("");
-// }
+function updatePesananSelesai() {
+    isLoading.value = true
+    router.patch(`/dashboard/pesanan/${pesananLocal.value.id}/update`, {
+        pesanan_detail: pesananLocal.value.pesanan_detail
+    }, {
+        onSuccess: () => {
+            console.log('berhasil');
+        },
+        onError: (errors) => {
+            console.log(errors);
+        }
+    });
+}
+
+// fungsi ubah jumlah
+const tambahJumlah = (detail) => {
+    detail.jumlah++;
+};
+
+const kurangJumlah = (detail) => {
+    if (detail.jumlah > 1) {
+        detail.jumlah--;
+    }
+};
+
+// fungsi hapus produk
+const hapusProduk = (index) => {
+    pesananLocal.value.pesanan_detail.splice(index, 1);
+};
+// fungsi tambah produk dummy
+// const tambahProduk = (pesananIndex) => {
+//     pesanan.value[pesananIndex].pesanan_detail.push({
+//         id: Date.now(),
+//         jumlah: 1,
+//         menu: {
+//             name: "Produk Baru",
+//             price: 20000,
+//             image: "https://via.placeholder.com/150",
+//         },
+//     });
+// };
 </script>
 
 <template>
     <Head title="Pesanan" />
     <AuthenticatedLayoutCustom>
-        <div v-if="pesanan.length > 0">
-            <div class="mt-16" v-for="(p, i) in pesanan" :key="i">
-                <div class="flex justify-between">
-                    <span class="font-bold text-2xl md:text-4xl"
-                        >Pesanan Meja {{ p.no_meja }}
+        <template #title>
+            <h1 class="text-2xl font-bold text-custom-dark">Pesanan</h1>
+        </template>
+        <div class="mt-16">
+            <!-- Header pesanan -->
+            <div class="flex justify-between items-center border-b pb-3 mb-5">
+                <div>
+                    <h2 class="font-bold text-2xl md:text-4xl">
+                        Pesanan Meja {{ pesananLocal.no_meja }}
                         <span class="uppercase"
-                            >({{ p.nama_pemesan }})</span
-                        ></span
-                    >
-                    <span class="font-bold text-2xl md:text-4xl">{{
+                            >({{ pesananLocal.nama_pemesan }})</span
+                        >
+                    </h2>
+                    <p class="text-gray-500">
+                        No Pesanan: {{ pesananLocal.no_pesanan }}
+                    </p>
+                </div>
+                <span class="font-bold text-2xl md:text-4xl text-custom-yellow">
+                    {{
                         new Intl.NumberFormat("id-ID", {
                             style: "currency",
                             currency: "IDR",
-                        }).format(p.total_harga)
-                    }}</span>
-                </div>
+                        }).format(pesananLocal.total_harga)
+                    }}
+                </span>
+            </div>
+
+            <!-- Grid product -->
+            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
                 <div
-                    class="mt-5 grid md:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-16"
+                    v-for="(d, j) in pesananLocal.pesanan_detail"
+                    :key="d.id"
+                    class="relative bg-white rounded-lg shadow-md p-3 hover:shadow-lg"
                 >
-                    <!--card-->
+                    <!-- badge jumlah -->
                     <div
-                        v-for="(d, j) in p.pesanan_detail"
-                        :key="j"
-                        class="relative bg-white rounded-lg shadow-md p-3 hover:shadow-lg item"
+                        class="absolute inline-flex items-center justify-center w-12 h-12 text-xl font-extrabold text-custom-dark bg-custom-yellow border-2 border-white rounded-full -top-3 -end-3"
                     >
-                        <div
-                            class="absolute inline-flex items-center justify-center w-16 h-16 text-2xl font-extrabold text-custom-light bg-custom-secondary border-2 border-white rounded-full -top-2 -end-2"
-                        >
-                            {{ d.jumlah }}
-                        </div>
-                        <img
-                            :src="d.menu.image"
-                            alt="burger"
-                            class="w-full transform hover:scale-90 transition duration-300"
-                        />
-                        <div class="m-3 text-center">
-                            <span class="font-bold text-xl">{{
-                                d.menu.name
-                            }}</span>
-                            <!-- <span class="block text-gray-600 text-sm"
-                                >bacon, iceberg, mayo</span
-                            > -->
-                            <span
-                                class="block text-custom-yellow mt-5 font-bold text-3xl"
-                                >{{
-                                    new Intl.NumberFormat("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                    }).format(d.menu.price)
-                                }}</span
-                            >
-                            <PrimaryButton
-                                id="coffee"
-                                class="w-full mt-5 flex justify-center"
-                            >
-                                <i class="fas fa-check-double mr-2"></i> Buat
-                                Pesanan</PrimaryButton
-                            >
-                            <SecondaryButton
-                                id="coffee"
-                                class="w-full mt-2 flex justify-center"
-                            >
-                                <i class="fas fa-trash mr-2"></i>
-                                Batal</SecondaryButton
-                            >
-                        </div>
+                        {{ d.jumlah }}
                     </div>
 
-                    <!--card end-->
+                    <!-- gambar -->
+                    <img
+                        :src="d.menu.image"
+                        alt="menu"
+                        width="200"
+                        height="200"
+                        class="rounded-md mx-auto"
+                    />
+
+                    <!-- detail menu -->
+                    <div class="mt-3 text-center">
+                        <span class="font-bold text-xl">{{ d.menu.name }}</span>
+                        <span
+                            class="block text-yellow-600 mt-2 font-bold text-2xl"
+                        >
+                            {{
+                                new Intl.NumberFormat("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                }).format(d.menu.price)
+                            }}
+                        </span>
+
+                        <!-- kontrol jumlah -->
+                        <div
+                            class="flex justify-center items-center mt-3 space-x-3"
+                        >
+                            <button
+                                @click="kurangJumlah(d)"
+                                class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                            >
+                                -
+                            </button>
+                            <span class="font-bold text-lg">{{
+                                d.jumlah
+                            }}</span>
+                            <button
+                                @click="tambahJumlah(d)"
+                                class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                        <!-- aksi -->
+                        <div class="mt-4">
+                            <button
+                                @click="hapusProduk(j, i)"
+                                class="w-full bg-custom-secondary hover:bg-orange-700 text-white py-2 rounded"
+                            >
+                                <i class="fas fa-trash mr-2"></i>Hapus Produk
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div v-else class="mt-16">
-            <div class="flex justify-center items-center w-100">
-                <figure>
-                    <img
-                        src="images/no_data.svg"
-                        alt="no-data"
-                        class="mx-auto w-40 h-40"
-                    />
-                    <figcaption class="text-center text-gray-600 mt-5">
-                        Belum ada pesanan
-                    </figcaption>
-                </figure>
+
+            <!-- tombol tambah produk -->
+            <div class="mt-8 flex justify-between">
+                <Link
+                    :href="route('pesanan.edit', pesananLocal.id)"
+                    class="px-4 py-2 bg-custom-yellow hover:bg-amber-500 text-dark rounded"
+                >
+                    <i class="fas fa-plus mr-2"></i> Tambah Pesanan
+                </Link>
+                <button
+                    @click="updatePesananSelesai"
+                    :disabled="isLoading"
+                    class="px-4 py-2 bg-custom-yellow hover:bg-amber-500 text-dark rounded"
+                >
+                    <i class="fas fa-check-double mr-2"></i> Pesanan Selesai
+                </button>
             </div>
         </div>
     </AuthenticatedLayoutCustom>

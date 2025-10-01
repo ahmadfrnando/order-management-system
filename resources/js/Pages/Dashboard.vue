@@ -19,153 +19,107 @@ const pesanan = ref(props.pesanan);
     <Head title="Dashboard" />
 
     <AuthenticatedLayoutCustom>
-        <div v-if="pesanan.length > 0" v-for="(p, i) in pesanan" :key="i">
+        <template #title>
+            <h1 class="text-2xl font-bold text-custom-dark">Dashboard</h1>
+        </template>
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-1 gap-4">
             <div
-                class="max-w-sm p-6 mt-10 bg-white border border-gray-200 rounded-2xl shadow-md"
+                v-if="pesanan.length > 0"
+                v-for="(p, i) in pesanan"
+                :key="i"
+                
             >
-                <!-- Nomor Pesanan -->
-                <div class="flex justify-center">
-                    <div
-                        class="text-xl font-bold text-custom-dark bg-custom-yellow w-12 h-12 flex items-center justify-center rounded-full"
-                    >
-                        {{ p.no_meja }}
-                    </div>
-                </div>
-
-                <!-- Nama Pemesan dan nomor pesanan -->
-                <div class="flex justify-between mt-4">
-                    <h5 class="text-xl text-center font-semibold text-gray-800">
-                        {{ p.nama_pemesan }}
-                    </h5>
-                    <h5 class="text-xl text-center font-semibold text-gray-800">
-                        #{{ p.no_pesanan }}
-                    </h5>
-                </div>
-
-                <!-- Daftar Pesanan -->
-
-                <div class="mt-5 divide-y divide-gray-200">
-                    <div class="flex justify-between py-2" v-for="(d, j) in p.pesanan_detail" :key="j">
-                        <span class="font-medium text-gray-600"
-                            >x{{ d.jumlah }} {{ d.menu.name }}</span
-                        >
-                        <span class="font-medium text-gray-600"
-                            >Rp
-                            {{
-                                new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(d.harga)
-                            }}</span
-                        >
-                    </div>
-                    <div
-                        class="flex justify-between py-3 font-bold text-lg text-gray-800"
-                    >
-                        <span>Total</span>
-                        <span class="text-custom-dark">
-                            {{
-                                new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(p.total_harga)
-                            }}</span>
-                    </div>
-                </div>
-
-                <!-- Tombol Aksi -->
-                <button
-                    class="w-full mt-5 bg-custom-yellow text-custom-dark font-semibold py-2 px-4 rounded-xl flex items-center justify-center hover:bg-yellow-400 transition"
-                >
-                    <i class="fas fa-check-double mr-2"></i>
-                    Buat Pesanan
-                </button>
-            </div>
-        </div>
-        <div v-if="pesanan.length > 0">
-            <div class="mt-16" v-for="(p, i) in pesanan" :key="i">
-                <div class="flex justify-between">
-                    <span class="font-bold text-2xl md:text-4xl"
-                        >Pesanan Meja {{ p.no_meja }}
-                        <span class="uppercase"
-                            >({{ p.nama_pemesan }})</span
-                        ></span
-                    >
-                    <span class="font-bold text-2xl md:text-4xl">{{
-                        new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                        }).format(p.total_harga)
-                    }}</span>
-                </div>
                 <div
-                    class="mt-5 grid md:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 gap-16"
+                    class="max-w-sm p-6 mt-10 bg-white border border-gray-200 rounded-2xl shadow-md"
                 >
-                    <!--card-->
-                    <div
-                        v-for="(d, j) in p.pesanan_detail"
-                        :key="j"
-                        class="relative bg-white rounded-lg shadow-md p-3 hover:shadow-lg item"
-                    >
+                    <!-- Nomor Pesanan -->
+                    <div class="flex justify-center">
                         <div
-                            class="absolute inline-flex items-center justify-center w-16 h-16 text-2xl font-extrabold text-custom-light bg-custom-secondary border-2 border-white rounded-full -top-2 -end-2"
+                            class="text-xl font-bold text-custom-dark bg-custom-yellow w-12 h-12 flex items-center justify-center rounded-full"
                         >
-                            {{ d.jumlah }}
+                            {{ p.no_meja }}
                         </div>
-                        <img
-                            :src="d.menu.image"
-                            alt="burger"
-                            class="w-full transform hover:scale-90 transition duration-300"
-                        />
-                        <div class="m-3 text-center">
-                            <span class="font-bold text-xl">{{
-                                d.menu.name
-                            }}</span>
-                            <!-- <span class="block text-gray-600 text-sm"
-                                >bacon, iceberg, mayo</span
-                            > -->
-                            <span
-                                class="block text-custom-yellow mt-5 font-bold text-3xl"
-                                >{{
+                    </div>
+
+                    <!-- Nama Pemesan dan nomor pesanan -->
+                    <div class="flex justify-between mt-4">
+                        <h5
+                            class="text-xl text-center font-semibold text-gray-800"
+                        >
+                            {{ p.nama_pemesan }}
+                        </h5>
+                        <h5
+                            class="text-xl text-center font-semibold text-gray-800"
+                        >
+                            #{{ p.no_pesanan }}
+                        </h5>
+                    </div>
+
+                    <!-- Daftar Pesanan -->
+
+                    <div class="mt-5 divide-y divide-gray-200">
+                        <div
+                            class="flex justify-between py-2"
+                            v-for="(d, j) in p.pesanan_detail"
+                            :key="j"
+                        >
+                            <span class="font-medium text-gray-600"
+                                >x{{ d.jumlah }} {{ d.menu.name }}</span
+                            >
+                            <span class="font-medium text-gray-600"
+                                >
+                                {{
                                     new Intl.NumberFormat("id-ID", {
                                         style: "currency",
                                         currency: "IDR",
-                                    }).format(d.menu.price)
+                                    }).format(d.harga)
                                 }}</span
                             >
-                            <PrimaryButton
-                                id="coffee"
-                                class="w-full mt-5 flex justify-center"
-                            >
-                                <i class="fas fa-check-double mr-2"></i> Buat
-                                Pesanan</PrimaryButton
-                            >
-                            <SecondaryButton
-                                id="coffee"
-                                class="w-full mt-2 flex justify-center"
-                            >
-                                <i class="fas fa-trash mr-2"></i>
-                                Batal</SecondaryButton
+                        </div>
+                        <div
+                            class="flex justify-between py-3 font-bold text-lg text-gray-800"
+                        >
+                            <span>Total</span>
+                            <span class="text-custom-dark">
+                                {{
+                                    new Intl.NumberFormat("id-ID", {
+                                        style: "currency",
+                                        currency: "IDR",
+                                    }).format(p.total_harga)
+                                }}</span
                             >
                         </div>
                     </div>
 
-                    <!--card end-->
+                    <!-- Tombol Aksi -->
+                    <Link
+                        :href="route('pesanan.index', p.id)"
+                        class="w-full mt-5 bg-custom-yellow text-custom-dark font-semibold py-2 px-4 rounded-xl flex items-center justify-center hover:bg-yellow-400 transition"
+                    >
+                        <i class="fas fa-check-double mr-2"></i>
+                        Detail Pesanan
+                    </Link>
+                    <button
+                        class="w-full mt-5 bg-red-500 text-white font-semibold py-2 px-4 rounded-xl flex items-center justify-center hover:bg-red-400 transition"
+                    >
+                        <i class="fas fa-trash mr-2"></i>
+                        Batalkan Pesanan
+                    </button>
                 </div>
             </div>
-        </div>
-        <div v-else class="mt-16">
-            <div class="flex justify-center items-center w-100">
-                <figure>
-                    <img
-                        src="images/no_data.svg"
-                        alt="no-data"
-                        class="mx-auto w-40 h-40"
-                    />
-                    <figcaption class="text-center text-gray-600 mt-5">
-                        Belum ada pesanan
-                    </figcaption>
-                </figure>
+            <div v-else class="mt-16">
+                <div class="flex justify-center items-center w-100">
+                    <figure>
+                        <img
+                            src="images/no_data.svg"
+                            alt="no-data"
+                            class="mx-auto w-40 h-40"
+                        />
+                        <figcaption class="text-center text-gray-600 mt-5">
+                            Belum ada pesanan
+                        </figcaption>
+                    </figure>
+                </div>
             </div>
         </div>
     </AuthenticatedLayoutCustom>

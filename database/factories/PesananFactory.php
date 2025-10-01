@@ -23,7 +23,7 @@ class PesananFactory extends Factory
             'jam' => $this->faker->time(),
             'tanggal' => $this->faker->date(),
             'total_harga' => $this->faker->numberBetween(10000, 100000),
-            'catatan' => $this->faker->sentence(1)
+            'catatan' => $this->faker->sentence(1),
         ];
     }
 }

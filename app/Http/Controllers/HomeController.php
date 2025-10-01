@@ -61,7 +61,8 @@ class HomeController extends Controller
                 'jam' => now()->format('H:i:s'),
                 'tanggal' => now()->format('Y-m-d'),
                 'total_harga' => $total_harga,
-                'catatan' => $validated['catatan']
+                'catatan' => $validated['catatan'],
+                'no_pesanan' => Pesanan::generateNoPesanan()
             ]);
 
             foreach ($validated['items'] as  $item) {
@@ -86,11 +87,16 @@ class HomeController extends Controller
                     'type' => 'success',
                     'message' => 'Pesanan berhasil disimpan!'
                 ]
-            ]);;
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             // dd($th);
-            return redirect()->route('home')->with('error', $th->getMessage());
+            return redirect()->route('home')->with([
+                'flash' => [
+                    'type' => 'error',
+                    'message' => 'Maaf pesanan gagal disimpan!' . $th->getMessage()
+                ]
+            ]);
         }
     }
     /**

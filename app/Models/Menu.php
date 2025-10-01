@@ -26,4 +26,9 @@ class Menu extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function pesanan_detail()
+    {
+        return $this->hasMany(PesananDetail::class, 'menu_id', 'id');
+    }
 }

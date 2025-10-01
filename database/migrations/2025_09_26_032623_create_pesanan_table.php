@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('pesanan', function (Blueprint $table) {
             $table->id();
+            $table->string('no_pesanan')->unique();
             $table->string('no_meja');
             $table->string('nama_pemesan');
             $table->time('jam');
             $table->date('tanggal');
-            $table->decimal('total_harga', 5, 2);
-            $table->text('catatan');
-            $table->boolean('is_done');
+            $table->decimal('total_harga', 12, 2);
+            $table->text('catatan')->nullable();
+            $table->boolean('is_done')->default(false);
             $table->timestamps();
         });
     }

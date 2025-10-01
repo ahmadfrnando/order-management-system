@@ -12,4 +12,14 @@ class PesananDetail extends Model
     protected $table = 'pesanan_detail';
     
     protected $guarded = [];
+
+    public function pesanan()
+    {
+        return $this->belongsTo(Pesanan::class);
+    }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'menu_id', 'id');
+    }
 }

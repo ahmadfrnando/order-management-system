@@ -12,4 +12,9 @@ class Pesanan extends Model
     protected $table = 'pesanan';
 
     protected $guarded = [];
+
+    public function pesanan_detail()
+    {
+        return $this->hasMany(PesananDetail::class);
+    }
 }

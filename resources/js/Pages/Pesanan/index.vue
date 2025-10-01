@@ -13,75 +13,15 @@ const props = defineProps({
 });
 
 const pesanan = ref(props.pesanan);
+
+// function buatPesanan(id) {
+//     router.patch("");
+// }
 </script>
 
 <template>
-    <Head title="Dashboard" />
-
+    <Head title="Pesanan" />
     <AuthenticatedLayoutCustom>
-        <div v-if="pesanan.length > 0" v-for="(p, i) in pesanan" :key="i">
-            <div
-                class="max-w-sm p-6 mt-10 bg-white border border-gray-200 rounded-2xl shadow-md"
-            >
-                <!-- Nomor Pesanan -->
-                <div class="flex justify-center">
-                    <div
-                        class="text-xl font-bold text-custom-dark bg-custom-yellow w-12 h-12 flex items-center justify-center rounded-full"
-                    >
-                        {{ p.no_meja }}
-                    </div>
-                </div>
-
-                <!-- Nama Pemesan dan nomor pesanan -->
-                <div class="flex justify-between mt-4">
-                    <h5 class="text-xl text-center font-semibold text-gray-800">
-                        {{ p.nama_pemesan }}
-                    </h5>
-                    <h5 class="text-xl text-center font-semibold text-gray-800">
-                        #{{ p.no_pesanan }}
-                    </h5>
-                </div>
-
-                <!-- Daftar Pesanan -->
-
-                <div class="mt-5 divide-y divide-gray-200">
-                    <div class="flex justify-between py-2" v-for="(d, j) in p.pesanan_detail" :key="j">
-                        <span class="font-medium text-gray-600"
-                            >x{{ d.jumlah }} {{ d.menu.name }}</span
-                        >
-                        <span class="font-medium text-gray-600"
-                            >Rp
-                            {{
-                                new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(d.harga)
-                            }}</span
-                        >
-                    </div>
-                    <div
-                        class="flex justify-between py-3 font-bold text-lg text-gray-800"
-                    >
-                        <span>Total</span>
-                        <span class="text-custom-dark">
-                            {{
-                                new Intl.NumberFormat("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                }).format(p.total_harga)
-                            }}</span>
-                    </div>
-                </div>
-
-                <!-- Tombol Aksi -->
-                <button
-                    class="w-full mt-5 bg-custom-yellow text-custom-dark font-semibold py-2 px-4 rounded-xl flex items-center justify-center hover:bg-yellow-400 transition"
-                >
-                    <i class="fas fa-check-double mr-2"></i>
-                    Buat Pesanan
-                </button>
-            </div>
-        </div>
         <div v-if="pesanan.length > 0">
             <div class="mt-16" v-for="(p, i) in pesanan" :key="i">
                 <div class="flex justify-between">
@@ -170,3 +110,14 @@ const pesanan = ref(props.pesanan);
         </div>
     </AuthenticatedLayoutCustom>
 </template>
+
+<style>
+.bg-dots-darker {
+    background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) {
+    .dark\:bg-dots-lighter {
+        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
+    }
+}
+</style>

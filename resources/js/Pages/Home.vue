@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed, onMounted, watch } from "vue";
 import HeroCoffee from "@/assets/images/coffee-hero.png";
 import CoffeeIcon from "@/assets/icons/coffee-icon.png";
@@ -10,6 +10,20 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
+import { useToast } from '@/Composables/useToast';
+
+const page = usePage()
+const { toast } = useToast()
+
+watch(
+  () => page.props.flash,
+  (flash) => {
+    if (flash?.message) {
+      toast(flash.message, flash.type || 'info')
+    }
+  },
+  { immediate: true }
+)
 
 const confirmingOrderingMenu = ref(false);
 const confirmingCustomerDetail = ref(false);
@@ -23,7 +37,7 @@ const openModal = (modal) => {
 const closeModal = (modal) => {
     modal == "ordering"
         ? (confirmingOrderingMenu.value = false)
-        : (confirmingOrderingMenu.value = false);
+        : (confirmingCustomerDetail.value = false);
 };
 
 onMounted(() => {
@@ -83,12 +97,13 @@ function submitOrder() {
 
     form.post("/orders", {
         onSuccess: () => {
-            alert("Pesanan berhasil disimpan!");
+            form.reset();
             cart.value = [];
+            closeModal("ordering");
+            closeModal("customer");
         },
         onError: (errors) => {
             console.error(errors);
-            alert("Gagal menyimpan pesanan");
         },
     });
 }

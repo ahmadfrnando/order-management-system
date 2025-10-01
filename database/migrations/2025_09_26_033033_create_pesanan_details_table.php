@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pesanan_id');
             $table->unsignedBigInteger('menu_id');
-            $table->decimal('harga', 5, 2);
+            $table->string('nama_menu');
+            $table->decimal('harga', 12, 2);
+            $table->integer('jumlah');
             $table->timestamps();
         });
     }

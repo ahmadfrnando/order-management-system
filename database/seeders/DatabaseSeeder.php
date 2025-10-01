@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Pesanan;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +22,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
         ]);
 
-        $this->call(MenuSeeder::class);
+        $this->call([
+            MenuSeeder::class,
+            PesananSeeder::class,
+            PesananDetailSeeder::class
+        ]);
+
     }
 }

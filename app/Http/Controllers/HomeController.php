@@ -50,6 +50,7 @@ class HomeController extends Controller
             'items.*.qty' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
         ]);
+
         try {
             $total_harga = collect($validated['items'])
                 ->sum(fn($item) => $item['qty'] * $item['price']);
@@ -57,11 +58,10 @@ class HomeController extends Controller
             $pesanan = Pesanan::create([
                 'nama_pemesan' => $validated['nama_pemesan'],
                 'no_meja' => $validated['no_meja'],
-                'waktu' => now(),
-                'tanggal' => now(),
+                'jam' => now()->format('H:i:s'),
+                'tanggal' => now()->format('Y-m-d'),
                 'total_harga' => $total_harga,
-                'status' => false,
-                'catatan' => $validated['catatan'] ?? null
+                'catatan' => $validated['catatan']
             ]);
 
             foreach ($validated['items'] as  $item) {
@@ -70,19 +70,23 @@ class HomeController extends Controller
                 if (!$menu) {
                     throw new \Exception('Menu tidak ditemukan');
                 }
-                
-                for ($i = 0; $i < $item['qty']; $i++) {
-                    PesananDetail::create([
-                        'pesanan_id' => $pesanan->id,
-                        'menu_id' => $menu->id,
-                        'harga' => $menu->harga
-                    ]);
-                }
+                PesananDetail::create([
+                    'pesanan_id' => $pesanan->id,
+                    'menu_id' => $menu->id,
+                    'nama_menu' => $menu->name,
+                    'harga' => $item['qty'] * $menu->price,
+                    'jumlah' => $item['qty']
+                ]);
             }
 
             DB::commit();
 
-            return redirect()->route('home')->with('success', 'Pesanan berhasil disimpan!');
+            return redirect()->route('home')->with([
+                'flash' => [
+                    'type' => 'success',
+                    'message' => 'Pesanan berhasil disimpan!'
+                ]
+            ]);;
         } catch (\Throwable $th) {
             DB::rollBack();
             // dd($th);

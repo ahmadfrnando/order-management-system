@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Pesanan;
+use App\Models\PesananRiwayat;
+use App\Observers\PesananObserver;
+use App\Observers\PesananRiwayatObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Pesanan::observe(PesananObserver::class);
+        PesananRiwayat::observe(PesananRiwayatObserver::class);
     }
 }

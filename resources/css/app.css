@@ -54,3 +54,7 @@ html {
 .text-custom-light{
     color: #E6D2B5;
 }
+
+.bg-custom-card {
+    background-color: #d4d4d4;
+}

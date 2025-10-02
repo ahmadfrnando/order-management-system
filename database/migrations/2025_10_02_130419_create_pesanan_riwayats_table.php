@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pesanan', function (Blueprint $table) {
+        Schema::create('pesanan_riwayat', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('pesanan_id');
             $table->string('no_pesanan')->unique();
             $table->string('no_meja');
             $table->string('nama_pemesan');
             $table->time('jam');
             $table->date('tanggal');
             $table->decimal('total_harga', 12, 2);
-            $table->integer('total_item')->default(0);
+            $table->integer('total_item');
             $table->text('catatan')->nullable();
             $table->boolean('is_done')->default(false);
             $table->timestamps();
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pesanan');
+        Schema::dropIfExists('pesanan_riwayat');
     }
 };

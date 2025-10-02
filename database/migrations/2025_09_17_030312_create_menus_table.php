@@ -18,8 +18,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->text('description')->nullable();
             $table->boolean('is_available')->default(true);
+            $table->boolean('is_best_seller')->default(false);
             $table->string('image')->nullable();
-            $table->integer('stock')->default(0);
             $table->integer('category_id')->default(0);
             $table->timestamps();
         });

@@ -4,48 +4,66 @@ import { ref, computed, onMounted, watch } from "vue";
 import HeroCoffee from "@/assets/images/coffee-hero.png";
 import CoffeeIcon from "@/assets/icons/coffee-icon.png";
 import DrinksIcon from "@/assets/icons/drinks-icon.png";
-import Modal from "@/Components/Modal.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import { useToast } from '@/Composables/useToast';
+import CartModal from "@/Components/CartModal.vue";
+import { useToast } from "@/Composables/useToast";
+import ProductCard from "@/Components/ProductCard.vue";
+import { useCart } from "@/Composables/useCart";
+import CustomerDetailModal from "@/Components/CustomerDetailModal.vue";
 
-const page = usePage()
-const { toast } = useToast()
+const page = usePage();
+const { toast } = useToast();
+const {
+    cart,
+    addToCart,
+    decreaseQty,
+    removeFromCart,
+    clearCart,
+    totalQty,
+    totalPrice,
+} = useCart();
+
+const form = useForm({
+    nama_pemesan: "",
+    no_meja: "",
+    catatan: "",
+    items: [],
+});
+
+function submitOrder(customerData) {
+    console.log(customerData.no_meja);
+    form.no_meja = customerData.no_meja;
+    form.nama_pemesan = customerData.nama_pemesan;
+    form.catatan = customerData.catatan;
+    form.items = cart.value;
+    form.post("/orders", {
+        onSuccess: () => {
+            form.reset();
+            clearCart();
+            closeModal("ordering");
+            closeModal("customer");
+        },
+    });
+}
 
 watch(
-  () => page.props.flash,
-  (flash) => {
-    if (flash?.message) {
-      toast(flash.message, flash.type || 'info')
-    }
-  },
-  { immediate: true }
-)
+    () => page.props.flash,
+    (flash) => {
+        if (flash?.message) {
+            toast(flash.message, flash.type || "info");
+        }
+    },
+    { immediate: true }
+);
 
-const confirmingOrderingMenu = ref(false);
-const confirmingCustomerDetail = ref(false);
-
-const openModal = (modal) => {
-    modal == "ordering"
-        ? (confirmingOrderingMenu.value = true)
-        : (confirmingCustomerDetail.value = true);
-};
-
-const closeModal = (modal) => {
-    modal == "ordering"
-        ? (confirmingOrderingMenu.value = false)
-        : (confirmingCustomerDetail.value = false);
-};
-
-onMounted(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-        cart.value = JSON.parse(savedCart);
-    }
-});
+const activeModal = ref(null);
+const openModal = (modal) => (activeModal.value = modal);
+const closeModal = () => (activeModal.value = null);
+// onMounted(() => {
+//     const savedCart = localStorage.getItem("cart");
+//     if (savedCart) {
+//         cart.value = JSON.parse(savedCart);
+//     }
+// });
 
 defineProps({
     coffees: {
@@ -60,53 +78,46 @@ defineProps({
     },
 });
 
-const cart = ref([]);
-function addToCart(items) {
-    const item = cart.value.find((c) => c.name === items.name);
-    if (item) {
-        item.qty += 1;
-    } else {
-        cart.value.push({
-            ...items,
-            qty: 1,
-        });
-    }
-}
+// const cart = ref([]);
+// function addToCart(items) {
+//     const item = cart.value.find((c) => c.name === items.name);
+//     if (item) {
+//         item.qty += 1;
+//     } else {
+//         cart.value.push({
+//             ...items,
+//             qty: 1,
+//         });
+//     }
+// }
 
-watch(
-    cart,
-    (newVal) => {
-        localStorage.setItem("cart", JSON.stringify(newVal));
-    },
-    { deep: true }
-);
+// watch(
+//     cart,
+//     (newVal) => {
+//         localStorage.setItem("cart", JSON.stringify(newVal));
+//     },
+//     { deep: true }
+// );
 
-const totalQty = computed(() => {
-    return cart.value.reduce((sum, item) => sum + item.qty, 0);
-});
+// const totalQty = computed(() => {
+//     return cart.value.reduce((sum, item) => sum + item.qty, 0);
+// });
 
-const form = useForm({
-    nama_pemesan: "",
-    no_meja: "",
-    catatan: "",
-    items: [],
-});
+// function submitOrder() {
+//     form.items = cart.value;
 
-function submitOrder() {
-    form.items = cart.value;
-
-    form.post("/orders", {
-        onSuccess: () => {
-            form.reset();
-            cart.value = [];
-            closeModal("ordering");
-            closeModal("customer");
-        },
-        onError: (errors) => {
-            console.error(errors);
-        },
-    });
-}
+//     form.post("/orders", {
+//         onSuccess: () => {
+//             form.reset();
+//             cart.value = [];
+//             closeModal("ordering");
+//             closeModal("customer");
+//         },
+//         onError: (errors) => {
+//             console.error(errors);
+//         },
+//     });
+// }
 </script>
 
 <template>
@@ -124,149 +135,21 @@ function submitOrder() {
             {{ totalQty }}
         </div>
     </button>
-    <Modal :show="confirmingOrderingMenu" @close="closeModal('ordering')">
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">Your Orders</h2>
-            <p class="mt-1 text-sm text-gray-600">
-                Review your selected items before proceeding to checkout.
-            </p>
-            <div class="mt-6">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
-                        <tr>
-                            <th
-                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Name
-                            </th>
-                            <th
-                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Price
-                            </th>
-                            <th
-                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Quantity
-                            </th>
-                            <th
-                                class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            ></th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="(item, index) in cart" :key="index">
-                            <td class="px-6 py-4">{{ item.name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{
-                                    new Intl.NumberFormat("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                    }).format(item.price * item.qty)
-                                }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                {{ item.qty }}
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                            >
-                                <button
-                                    @click="item.qty += 1"
-                                    type="button"
-                                    class="p-2 ms-2 text-xs text-center font-medium inline-flex items-center text-white bg-stone-700 rounded-full hover:bg-stone-800 focus:ring-4 focus:outline-none focus:ring-stone-300"
-                                >
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <button
-                                    @click="
-                                        item.qty > 1
-                                            ? (item.qty -= 1)
-                                            : cart.splice(index, 1)
-                                    "
-                                    type="button"
-                                    class="p-2 ms-2 text-xs text-center font-medium inline-flex items-center text-white bg-yellow-500 rounded-full hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
-                                >
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <SecondaryButton @click="closeModal('ordering')">
-                    Take me back
-                </SecondaryButton>
+    <CartModal
+        :show="activeModal === 'ordering'"
+        :cart="cart"
+        @close="closeModal('ordering')"
+        @addItem="addToCart"
+        @decreaseItem="decreaseQty"
+        @removeItem="removeFromCart"
+        @openCustomer="openModal('customer')"
+    />
+    <CustomerDetailModal
+        :show="activeModal === 'customer'"
+        @close="closeModal('customer')"
+        @submit="submitOrder"
+    />
 
-                <PrimaryButton class="ms-3" @click="openModal('customer')">
-                    Lanjut Pemesanan
-                </PrimaryButton>
-            </div>
-        </div>
-    </Modal>
-    <Modal :show="confirmingCustomerDetail" @close="closeModal('customer')">
-        <div class="p-6">
-            <h2 class="text-lg font-medium text-gray-900">
-                Information Customer
-            </h2>
-            <div class="mt-6">
-                <form @submit.prevent="submitOrder">
-                    <div class="mt-2">
-                        <InputLabel for="no_meja" value="Nomor Meja" />
-                        <TextInput
-                            id="no_meja"
-                            type="number"
-                            class="mt-1 block w-full"
-                            v-model="form.no_meja"
-                            required
-                            autofocus
-                        />
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.no_meja"
-                        />
-                    </div>
-                    <div class="mt-2">
-                        <InputLabel for="nama_pemesan" value="Nama Pemesan" />
-                        <TextInput
-                            id="nama_pemesan"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.nama_pemesan"
-                            required
-                            autofocus
-                        />
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.nama_pemesan"
-                        />
-                    </div>
-                    <div class="mt-2">
-                        <InputLabel for="catatan" value="Catatan" />
-                        <Textarea
-                            id="catatan"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                            v-model="form.catatan"
-                        ></Textarea>
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.nama_pemesan"
-                        />
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <PrimaryButton
-                            class="ms-4"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing"
-                        >
-                            Lakukan Pemesanan
-                        </PrimaryButton>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </Modal>
     <div
         class="top-0 left-0 right-0 p-16 bg-custom-primary h-screen-75 rounded-b-full"
     >
@@ -351,38 +234,12 @@ function submitOrder() {
             />
         </div>
         <div class="mt-5 grid lg:grid-cols-5 sm:grid-cols-2 gap-16">
-            <div
+            <ProductCard
                 v-for="(coffee, index) in coffees"
                 :key="index"
-                class="bg-white rounded-lg shadow-md p-3 hover:shadow-lg item"
-            >
-                <img
-                    :src="coffee.image"
-                    :alt="coffee.name"
-                    class="w-full transform hover:scale-90 transition duration-300"
-                />
-                <div class="m-3 text-center">
-                    <span class="font-bold text-xl">{{ coffee.name }}</span>
-                    <span class="block text-gray-600 text-sm">{{
-                        coffee.description
-                    }}</span>
-                    <span
-                        class="block text-custom-yellow mt-3 font-bold text-xl"
-                        >{{
-                            new Intl.NumberFormat("id-ID", {
-                                style: "currency",
-                                currency: "IDR",
-                            }).format(coffee.price)
-                        }}</span
-                    >
-                </div>
-               <PrimaryButton
-                    @click="addToCart(coffee)"
-                    id="coffee"
-                    class="w-full flex justify-center"
-                    > <i class="fas fa-plus mr-2"></i> Pilih Menu</PrimaryButton
-                >
-            </div>
+                :product="coffee"
+                @add="addToCart"
+            />
         </div>
     </section>
     <!-- drinks section -->
@@ -395,38 +252,12 @@ function submitOrder() {
             />
         </div>
         <div class="mt-5 grid lg:grid-cols-5 sm:grid-cols-2 gap-16">
-            <div
+            <ProductCard
                 v-for="(drink, index) in drinks"
                 :key="index"
-                class="bg-white rounded-lg shadow-md p-3 hover:shadow-lg item"
-            >
-                <img
-                    :src="drink.image"
-                    alt="drink"
-                    class="w-full transform hover:scale-90 transition duration-300"
-                />
-                <div class="m-3 text-center">
-                    <span class="font-bold text-xl">{{ drink.name }}</span>
-                    <span class="block text-gray-600 text-sm">{{
-                        drink.description
-                    }}</span>
-                    <span
-                        class="block text-custom-yellow mt-3 font-bold text-xl"
-                        >{{
-                            new Intl.NumberFormat("id-ID", {
-                                style: "currency",
-                                currency: "IDR",
-                            }).format(drink.price)
-                        }}</span
-                    >
-                </div>
-                <PrimaryButton
-                    @click="addToCart(drink)"
-                    id="coffee"
-                    class="w-full flex justify-center"
-                    > <i class="fas fa-plus mr-2"></i> Pilih Menu</PrimaryButton
-                >
-            </div>
+                :product="drink"
+                @add="addToCart"
+            />
         </div>
     </section>
     <!--contact start-->

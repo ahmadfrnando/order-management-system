@@ -19,7 +19,6 @@ class HomeController extends Controller
     {
         $coffee = Menu::where('category_id', 1)->get();
         $drinks = Menu::where('category_id', 2)->get();
-
         return Inertia::render('Home', [
             'coffees' => $coffee,
             'drinks' => $drinks,
@@ -61,6 +60,7 @@ class HomeController extends Controller
                 'jam' => now()->format('H:i:s'),
                 'tanggal' => now()->format('Y-m-d'),
                 'total_harga' => $total_harga,
+                'total_item' => (count($validated['items']) * $validated['items'][0]['qty']) ?? 0,
                 'catatan' => $validated['catatan'],
                 'no_pesanan' => Pesanan::generateNoPesanan()
             ]);

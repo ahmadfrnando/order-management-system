@@ -3,18 +3,38 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
 import ProductCard from "./Partials/ProductCard.vue";
+import MenuCard from "./Partials/MenuCard.vue";
 import { useCurrency } from "@/Composables/useCurrency";
+import { useCart } from "@/Composables/useCart";
 import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
 
 const { formatCurrency } = useCurrency();
 
+const {
+    cart,
+    addToCart,
+    decreaseQty,
+    removeFromCart,
+    clearCart,
+    totalQty,
+    totalPrice,
+} = useCart();
+
 const props = defineProps({
-    pesanan: Object,
+    pesanan: {
+        type: Object,
+        required: true,
+    },
+    menu: {
+        type: Array,
+        default: () => [],
+    },
 });
 const pesananLocal = ref(JSON.parse(JSON.stringify(props.pesanan)));
 const isLoading = ref(false);
-console.log(pesananLocal);
+const menuCoffee = props.menu.filter(menu => menu.category_id === 1);
+const menuDrink = props.menu.filter(menu => menu.category_id === 2);
 
 function updatePesananSelesai() {
     isLoading.value = true;
@@ -77,7 +97,7 @@ const hapusProduk = (index) => {
             </div>
 
             <!-- Grid product -->
-            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8 mt-16">
                 <ProductCard
                     v-for="(detail, index) in pesananLocal.pesanan_detail"
                     :key="detail.id"
@@ -89,18 +109,47 @@ const hapusProduk = (index) => {
                 />
             </div>
 
+            <div class="flex justify-between items-center border-b pb-3 mb-5 mt-16">
+                <div>
+                    <h2 class="font-bold text-2xl md:text-4xl">
+                        Coffees
+                    </h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+                <MenuCard
+                    v-for="menu in menuCoffee"
+                    :key="menu.id"
+                    :menu="menu"
+                />
+            </div>
+            <div class="flex justify-between items-center border-b pb-3 mb-5 mt-16">
+                <div>
+                    <h2 class="font-bold text-2xl md:text-4xl">
+                        Drinks
+                    </h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+                <MenuCard
+                    v-for="menu in menuDrink"
+                    :key="menu.id"
+                    :menu="menu"
+                />
+            </div>
+
             <!-- tombol tambah produk -->
             <div class="mt-8 flex justify-between">
-                <Link :href="route('pesanan.edit', pesananLocal.id)">
+                <Link :href="route('pesanan.index', pesananLocal.id)">
                     <SecondaryButton>
-                        <i class="fas fa-pencil-alt mr-2"></i> Ubah Pesanan
+                        <i class="fas fa-arrow-left mr-2"></i> Kembali
                     </SecondaryButton>
                 </Link>
                 <PrimaryButton
                     @click="updatePesananSelesai"
                     :disabled="isLoading"
                 >
-                    <i class="fas fa-check-double mr-2"></i> Pesanan Selesai
+                    <i class="fas fa-check-double mr-2"></i> Simpan Perubahan
                 </PrimaryButton>
             </div>
         </div>

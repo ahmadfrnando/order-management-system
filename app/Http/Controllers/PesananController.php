@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,12 @@ class PesananController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $pesanan = Pesanan::with('pesanan_detail.menu')->findOrFail($id);
+        $menu = Menu::all();
+        return Inertia::render('Pesanan/Edit', [
+            'pesanan' => $pesanan,
+            'menu' => $menu
+        ]);
     }
 
     /**
@@ -74,10 +80,13 @@ class PesananController extends Controller
             $totalHarga = $pesanan->pesanan_detail()->with('menu')->get()->sum(function($d) {
                 return $d->jumlah * $d->menu->price;
             });
+
+            $totalItem = $pesanan->pesanan_detail()->sum('jumlah');
     
             $pesanan->update([
                 'total_harga' => $totalHarga,
-                'is_done' => true
+                'is_done' => true,
+                'total_item' => $totalItem
             ]);
             DB::commit();
             return redirect()->route('dashboard')->with([

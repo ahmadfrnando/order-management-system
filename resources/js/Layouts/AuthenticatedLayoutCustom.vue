@@ -16,6 +16,27 @@ watch(
   },
   { immediate: true }
 )
+
+const sidebarMenu = [
+  {
+    name: "Pesanan",
+    href: route("dashboard"),
+    active: route().current('dashboard') || route().current('pesanan.*'),
+    icon: "fas fa-shopping-basket",
+  },
+  {
+    name: "Riwayat",
+    href: route("riwayat.index"),
+    active: route().current('riwayat.index'),
+    icon: "fas fa-history",
+  },
+  {
+    name: "Profile",
+    href: route("riwayat.index"),
+    active: route().current('riwayat.index'),
+    icon: "fas fa-history",
+  },
+]
 </script>
 
 <template>
@@ -42,22 +63,13 @@ watch(
                     </div>
                 </div>
                 <ul class="hidden lg:block mr-10 mb-10" id="menu">
-                    <li class="my-3">
+                    <li class="my-3 mb-5" v-for="(menu, i) in sidebarMenu" :key="i">
                         <SidebarLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="menu.href"
+                            :active="menu.active"
                         >
-                            <i class="fas fa-shopping-basket mr-2"></i>
-                            <span>Pesanan</span>
-                        </SidebarLink>
-                    </li>
-                    <li class="my-3">
-                        <SidebarLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
-                            <i class="fas fa-shopping-basket mr-2"></i>
-                            <span>Profile</span>
+                            <i :class="menu.icon" class="mr-2"></i>
+                            <span>{{ menu.name }}</span>
                         </SidebarLink>
                     </li>
                 </ul>

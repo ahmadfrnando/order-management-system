@@ -20,6 +20,7 @@ class Menu extends Model
         'image',
         'stock',
         'category_id',
+        'is_best_seller',
     ];
 
     public function category()

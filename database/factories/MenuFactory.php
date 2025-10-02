@@ -23,6 +23,7 @@ class MenuFactory extends Factory
             'price' => $this->faker->numberBetween(10000, 50000),
             'category_id' => $this->faker->numberBetween(1, 2),
             'image' => '/images/coffee-cup.png',
+            'is_best_seller' => $this->faker->boolean(),
         ];
     }
 }

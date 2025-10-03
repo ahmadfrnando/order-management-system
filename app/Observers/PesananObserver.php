@@ -12,7 +12,7 @@ class PesananObserver
      */
     public function created(Pesanan $pesanan): void
     {
-      //
+        //
     }
 
     /**
@@ -21,18 +21,33 @@ class PesananObserver
     public function updated(Pesanan $pesanan): void
     {
         if ($pesanan->isDirty('is_done') && $pesanan->is_done) {
-            PesananRiwayat::create([
-                'pesanan_id'   => $pesanan->id,
-                'nama_pemesan' => $pesanan->nama_pemesan,
-                'no_meja'      => $pesanan->no_meja,
-                'catatan'      => $pesanan->catatan,
-                'is_done'      => $pesanan->is_done,
-                'no_pesanan'   => $pesanan->no_pesanan,
-                'total_harga'  => $pesanan->total_harga,
-                'total_item'   => $pesanan->total_item,
-                'tanggal'      => $pesanan->tanggal,
-                'jam'          => $pesanan->jam
-            ]);
+            if (!$pesanan->pesanan_riwayat()->exists()) {
+                PesananRiwayat::create([
+                    'pesanan_id'   => $pesanan->id,
+                    'nama_pemesan' => $pesanan->nama_pemesan,
+                    'no_meja'      => $pesanan->no_meja,
+                    'catatan'      => $pesanan->catatan,
+                    'is_done'      => $pesanan->is_done,
+                    'no_pesanan'   => $pesanan->no_pesanan,
+                    'total_harga'  => $pesanan->total_harga,
+                    'total_item'   => $pesanan->total_item,
+                    'tanggal'      => $pesanan->tanggal,
+                    'jam'          => $pesanan->jam
+                ]);
+            } else {
+                $pesanan->pesanan_riwayat()->update([
+                    'pesanan_id'   => $pesanan->id,
+                    'nama_pemesan' => $pesanan->nama_pemesan,
+                    'no_meja'      => $pesanan->no_meja,
+                    'catatan'      => $pesanan->catatan,
+                    'is_done'      => $pesanan->is_done,
+                    'no_pesanan'   => $pesanan->no_pesanan,
+                    'total_harga'  => $pesanan->total_harga,
+                    'total_item'   => $pesanan->total_item,
+                    'tanggal'      => $pesanan->tanggal,
+                    'jam'          => $pesanan->jam
+                ]);
+            }
         }
     }
 

@@ -28,7 +28,7 @@ const props = defineProps({
                     :riwayat="riwayat"
                     :key="index"
                 />
-                <NoData v-else />
+                 <NoData v-else >Belum ada riwayat</NoData>
             </div>
         </div>
     </AuthenticatedLayoutCustom>

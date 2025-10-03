@@ -86,11 +86,6 @@ const sidebarMenu = [
                 >
                     <i class="fas fa-shopping-basket"></i> 8 items - $17.50
                 </button>
-                <a
-                    href="#"
-                    class="font-bold rounded-full bg-yellow-400 ml-2 py-2 px-3"
-                    >login</a
-                >
                 <Link
                     :href="route('logout')"
                     method="post"

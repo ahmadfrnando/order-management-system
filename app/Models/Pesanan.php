@@ -18,6 +18,11 @@ class Pesanan extends Model
         return $this->hasMany(PesananDetail::class);
     }
 
+    public function pesanan_riwayat()
+    {
+        return $this->hasOne(PesananRiwayat::class);
+    }
+
     public static function generateNoPesanan()
     {
         $lastPesanan = Pesanan::whereDate('tanggal', now()->toDateString())

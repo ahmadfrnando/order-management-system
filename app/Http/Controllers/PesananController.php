@@ -7,6 +7,7 @@ use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PesananController extends Controller
 {
@@ -34,7 +35,54 @@ class PesananController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pesanan = Pesanan::findOrFail($request->id);
+        DB::beginTransaction();
+        try {
+            foreach ($request->pesanan_detail as $detail) {
+                $pesananDetail = $pesanan->pesanan_detail()->where('menu_id', $detail['menu_id'])->first();
+                if ($pesananDetail) {
+                    $pesananDetail->update([
+                        'jumlah' => $detail['jumlah']
+                    ]);
+                } else {
+                    $pesanan->pesanan_detail()->create([
+                        'menu_id' => $detail['menu_id'],
+                        'jumlah' => $detail['jumlah'],
+                        'harga' => Menu::find($detail['menu_id'])->price,
+                        'nama_menu' => Menu::find($detail['menu_id'])->name,
+                        'pesanan_id' => $pesanan->id
+                    ]);
+                }
+            }
+            $totalHarga = $pesanan->pesanan_detail()->with('menu')->get()->sum(function($d) {
+                return $d->jumlah * $d->menu->price;
+            });
+
+            $totalItem = $pesanan->pesanan_detail()->sum('jumlah');
+            //Pesanan gagal disimpan!SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '93' for key 'pesanan_riwayat.pesanan_riwayat_no_pesanan_unique' (Connection: mysql, SQL: insert into `pesanan_riwayat` (`pesanan_id`, `nama_pemesan`, `no_meja`, `catatan`, `is_done`, `no_pesanan`, `total_harga`, `total_item`, `tanggal`, `jam`, `updated_at`, `created_at`) values (1, Wilmer McClure Sr., 1, Quos beatae., 1, 93, 102722, 4, 1993-04-01, 01:05:58, 2025-10-04 01:03:23, 2025-10-04 01:03:23))
+    
+            $pesanan->update([
+                'total_harga' => $totalHarga,
+                'is_done' => true,
+                'total_item' => $totalItem
+            ]);
+            DB::commit();
+            return redirect()->route('pesanan.index', [$pesanan->id])->with([
+                'flash' => [
+                    'type' => 'success',
+                    'message' => 'Pesanan telah selesai diubah!'
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return redirect()->route('pesanan.index', [$pesanan->id])->with([
+                'flash' => [
+                    'type' => 'danger',
+                    'message' => 'Pesanan gagal diubah!' . $th->getMessage()
+                ]
+            ]);
+        }
     }
 
     /**
@@ -51,7 +99,7 @@ class PesananController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): Response
     {
         $pesanan = Pesanan::with('pesanan_detail.menu')->findOrFail($id);
         $menu = Menu::all();

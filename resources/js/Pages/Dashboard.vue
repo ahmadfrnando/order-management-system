@@ -32,7 +32,7 @@ const pesanan = ref(props.pesanan);
                 :key="index"
                 
             />
-            <NoData v-else />
+            <NoData v-else >Belum ada pesanan</NoData>
         </div>
     </AuthenticatedLayoutCustom>
 </template>

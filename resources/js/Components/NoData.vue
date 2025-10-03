@@ -8,7 +8,7 @@
                     class="mx-auto w-40 h-40"
                 />
                 <figcaption class="text-center text-gray-600 mt-5">
-                    Belum ada pesanan
+                    <slot />
                 </figcaption>
             </figure>
         </div>

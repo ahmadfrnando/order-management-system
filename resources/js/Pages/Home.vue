@@ -261,57 +261,59 @@ defineProps({
         </div>
     </section>
     <!--contact start-->
-    <div
-        class="bottom-0 left-0 right-0 bg-custom-primary py-20 text-center text-custom-light"
-        id="contact"
-    >
-        <span class="mt-12 font-bold text-5xl">Drop us a line</span>
-        <form class="mt-10 w-1/2 mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                <input
-                    type="text"
-                    class="rounded-lg bg-gray-200 p-2"
-                    placeholder="name"
-                />
-                <input
-                    type="text"
-                    class="rounded-lg bg-gray-200 p-2"
-                    placeholder="email"
-                />
+    <section id="contact">
+        <div
+            class="bottom-0 left-0 right-0 bg-custom-primary py-20 text-center text-custom-light"
+            id="contact"
+        >
+            <span class="mt-12 font-bold text-5xl">Drop us a line</span>
+            <form class="mt-10 w-1/2 mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <input
+                        type="text"
+                        class="rounded-lg bg-gray-200 p-2"
+                        placeholder="name"
+                    />
+                    <input
+                        type="text"
+                        class="rounded-lg bg-gray-200 p-2"
+                        placeholder="email"
+                    />
+                </div>
+                <div class="mt-10">
+                    <textarea
+                        class="rounded-lg bg-gray-200 p-2 w-full h-screen-25"
+                        placeholder="message"
+                    ></textarea>
+                </div>
+                <div class="mt-6">
+                    <button
+                        type="submit"
+                        class="text-white text-xl hover:shadow-lg rounded-lg bg-custom-secondary px-5 py-2"
+                    >
+                        Send
+                    </button>
+                </div>
+            </form>
+            <hr class="mt-20 bg-gray-200 w-2/3 mx-auto" />
+            <div class="flex justify-center w-2/3 mx-auto">
+                <div class="font-bold mt-10 mr-auto">
+                    <span class="mx-5">
+                        <a href="shortcodes.html"> Shrotcodes </a>
+                    </span>
+                    <span class="mx-5">
+                        <a href="documentation.html"> Documentation </a>
+                    </span>
+                    <span class="mx-5">
+                        <a href="https://github.com/panbak" target="_blank">
+                            Author
+                        </a>
+                    </span>
+                </div>
+                <div class="font-bold mt-10 ml-auto">&copy; Panos Bakas</div>
             </div>
-            <div class="mt-10">
-                <textarea
-                    class="rounded-lg bg-gray-200 p-2 w-full h-screen-25"
-                    placeholder="message"
-                ></textarea>
-            </div>
-            <div class="mt-6">
-                <button
-                    type="submit"
-                    class="text-white text-xl hover:shadow-lg rounded-lg bg-custom-secondary px-5 py-2"
-                >
-                    Send
-                </button>
-            </div>
-        </form>
-        <hr class="mt-20 bg-gray-200 w-2/3 mx-auto" />
-        <div class="flex justify-center w-2/3 mx-auto">
-            <div class="font-bold mt-10 mr-auto">
-                <span class="mx-5">
-                    <a href="shortcodes.html"> Shrotcodes </a>
-                </span>
-                <span class="mx-5">
-                    <a href="documentation.html"> Documentation </a>
-                </span>
-                <span class="mx-5">
-                    <a href="https://github.com/panbak" target="_blank">
-                        Author
-                    </a>
-                </span>
-            </div>
-            <div class="font-bold mt-10 ml-auto">&copy; Panos Bakas</div>
         </div>
-    </div>
+    </section>
     <!--contact end-->
 </template>
 

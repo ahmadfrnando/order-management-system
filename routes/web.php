@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/pesanan/{id}', [PesananController::class, 'index'])->name('pesanan.index');
     Route::get('/dashboard/pesanan/{id}/edit', [PesananController::class, 'edit'])->name('pesanan.edit');
     Route::patch('/dashboard/pesanan/{id}/update', [PesananController::class, 'update'])->name('pesanan.update');
+    Route::post('/dashboard/pesanan', [PesananController::class, 'store'])->name('pesanan.store');
 
     //riwayat pesanan
     Route::resource('/pesanan/riwayat', PesananRiwayatController::class)->only(['index', 'show']);

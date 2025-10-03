@@ -9,9 +9,9 @@ const props = defineProps({
 
 const dataMenu = props.menu;
 
-const emit = defineEmits(["tambah"]);
+const emit = defineEmits(["add"]);
 
-console.log(dataMenu);
+// console.log(dataMenu.image);
 
 </script>
 
@@ -36,7 +36,7 @@ console.log(dataMenu);
             <!-- aksi -->
             <div class="mt-4">
                 <PrimaryButton
-                    @click="emit('tambah', dataMenu.id)"
+                    @click="emit('add', dataMenu)"
                     :class="'w-full flex justify-center'"
                 >
                     <i class="fas fa-plus mr-2"></i>Pilih Menu

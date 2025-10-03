@@ -1,7 +1,7 @@
 <script setup>
 import { useCurrency } from "@/Composables/useCurrency";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
+import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
+import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
@@ -77,9 +77,9 @@ const { formatCurrency } = useCurrency();
       <!-- actions -->
       <div class="mt-6 flex justify-end">
         <SecondaryButton @click="emit('close')">
-          Take me back
+          Kembali
         </SecondaryButton>
-        <PrimaryButton class="ms-3" @click="emit('openCustomer')">
+        <PrimaryButton v-if="cart.length > 0" class="ms-3" @click="emit('openCustomer')">
           Lanjut Pemesanan
         </PrimaryButton>
       </div>

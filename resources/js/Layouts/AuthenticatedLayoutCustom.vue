@@ -27,14 +27,14 @@ const sidebarMenu = [
   {
     name: "Riwayat",
     href: route("riwayat.index"),
-    active: route().current('riwayat.index'),
+    active: route().current('riwayat.*'),
     icon: "fas fa-history",
   },
   {
-    name: "Profile",
-    href: route("riwayat.index"),
-    active: route().current('riwayat.index'),
-    icon: "fas fa-history",
+    name: "Kelola Menu",
+    href: route("menu.index"),
+    active: route().current('menu.*'),
+    icon: "fas fa-coffee",
   },
 ]
 </script>

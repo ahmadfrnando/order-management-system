@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PesananRiwayatController;
 use App\Http\Controllers\ProfileController;
@@ -50,7 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/pesanan', [PesananController::class, 'store'])->name('pesanan.store');
 
     //riwayat pesanan
-    Route::resource('/pesanan/riwayat', PesananRiwayatController::class)->only(['index', 'show']);
+    Route::resource('/dashboard/riwayat', PesananRiwayatController::class)->only(['index', 'show']);
+    Route::resource('/dashboard/menu', MenuController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

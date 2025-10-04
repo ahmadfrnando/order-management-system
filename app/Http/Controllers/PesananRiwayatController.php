@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PesananDetailRiwayat;
 use App\Models\PesananRiwayat;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -40,9 +41,12 @@ class PesananRiwayatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): Response
     {
-        //
+        $riwayat = PesananRiwayat::with('pesanan_detail_riwayat')->findOrFail($id);
+        return Inertia::render('Riwayat/Show', [
+            'riwayat' => $riwayat
+        ]);
     }
 
     /**

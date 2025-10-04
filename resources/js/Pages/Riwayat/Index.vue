@@ -2,7 +2,7 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
-import PesananCard from "./PesananCard.vue";
+import PesananCard from "./Partials/PesananCard.vue";
 import NoData from "@/Components/NoData.vue";
 
 const props = defineProps({

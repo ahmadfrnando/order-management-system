@@ -39,6 +39,11 @@ class PesananController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->pesanan_detail as $detail) {
+                $menu = Menu::find($detail['menu_id']);
+                if (!$menu) {
+                    throw new \Exception('Menu tidak ditemukan');
+                }
+
                 $pesananDetail = $pesanan->pesanan_detail()->where('menu_id', $detail['menu_id'])->first();
                 if ($pesananDetail) {
                     $pesananDetail->update([
@@ -48,8 +53,8 @@ class PesananController extends Controller
                     $pesanan->pesanan_detail()->create([
                         'menu_id' => $detail['menu_id'],
                         'jumlah' => $detail['jumlah'],
-                        'harga' => Menu::find($detail['menu_id'])->price,
-                        'nama_menu' => Menu::find($detail['menu_id'])->name,
+                        'harga' => $menu->price,
+                        'nama_menu' => $menu->name,
                         'pesanan_id' => $pesanan->id
                     ]);
                 }
@@ -58,9 +63,7 @@ class PesananController extends Controller
                 return $d->jumlah * $d->menu->price;
             });
 
-            $totalItem = $pesanan->pesanan_detail()->sum('jumlah');
-            //Pesanan gagal disimpan!SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '93' for key 'pesanan_riwayat.pesanan_riwayat_no_pesanan_unique' (Connection: mysql, SQL: insert into `pesanan_riwayat` (`pesanan_id`, `nama_pemesan`, `no_meja`, `catatan`, `is_done`, `no_pesanan`, `total_harga`, `total_item`, `tanggal`, `jam`, `updated_at`, `created_at`) values (1, Wilmer McClure Sr., 1, Quos beatae., 1, 93, 102722, 4, 1993-04-01, 01:05:58, 2025-10-04 01:03:23, 2025-10-04 01:03:23))
-    
+            $totalItem = $pesanan->pesanan_detail()->sum('jumlah');    
             $pesanan->update([
                 'total_harga' => $totalHarga,
                 'is_done' => true,
@@ -76,9 +79,9 @@ class PesananController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return redirect()->route('pesanan.index', [$pesanan->id])->with([
+            return redirect()->route('pesanan.edit', [$pesanan->id])->with([
                 'flash' => [
-                    'type' => 'danger',
+                    'type' => 'error',
                     'message' => 'Pesanan gagal diubah!' . $th->getMessage()
                 ]
             ]);
@@ -146,9 +149,9 @@ class PesananController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
-            return redirect()->route('pesanan.index')->with([
+            return redirect()->route('pesanan.index', [$pesanan->id])->with([
                 'flash' => [
-                    'type' => 'danger',
+                    'type' => 'error',
                     'message' => 'Pesanan gagal disimpan!' . $th->getMessage()
                 ]
             ]);

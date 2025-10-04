@@ -12,26 +12,32 @@ class PesananRiwayatObserver
      * Handle the PesananRiwayat "created" event.
      */
     public function created(PesananRiwayat $pesananRiwayat): void
-    {   
+    {
         $pesananDetail = PesananDetail::where('pesanan_id', $pesananRiwayat->pesanan_id)->get();
         foreach ($pesananDetail as $value) {
-            $pesananRiwayat = PesananDetailRiwayat::find($value->menu_id);
-            if(!$pesananRiwayat) {
-                PesananDetailRiwayat::create([
-                    'pesanan_riwayat_id'   => $value->id,
-                    'menu_id' => $value->menu_id,
-                    'nama_menu'      => $value->nama_menu,
-                    'harga'      => $value->harga,
-                    'jumlah'      => $value->jumlah
-                ]);
-            } else {
-                $pesananRiwayat->update([
-                    'pesanan_riwayat_id'   => $value->id,
-                    'menu_id' => $value->menu_id,
-                    'nama_menu'      => $value->nama_menu,
-                    'harga'      => $value->harga,
-                    'jumlah'      => $value->jumlah
-                ]);
+            if (!is_null($value->menu)) {
+                $pesananDetailRiwayat = PesananDetailRiwayat::find($value->menu_id);
+                if (!$pesananDetailRiwayat) {
+                    PesananDetailRiwayat::create([
+                        'pesanan_riwayat_id'   => $pesananRiwayat->id,
+                        'nama_menu'      => $value->nama_menu,
+                        'menu_id'      => $value->menu_id,
+                        'kategori_id'      => $value->menu->category_id,
+                        'nama_kategori'      => $value->menu->category->name,
+                        'harga'      => $value->harga,
+                        'jumlah'      => $value->jumlah
+                    ]);
+                } else {
+                    $pesananRiwayat->update([
+                        'pesanan_riwayat_id'   => $pesananRiwayat->id,
+                        'nama_menu'      => $value->nama_menu,
+                        'menu_id'      => $value->menu_id,
+                        'kategori_id'      => $value->menu->category_id,
+                        'nama_kategori'      => $value->menu->category->name,
+                        'harga'      => $value->harga,
+                        'jumlah'      => $value->jumlah
+                    ]);
+                }
             }
         }
     }

@@ -11,4 +11,9 @@ class PesananDetailRiwayat extends Model
 
     protected $table = 'pesanan_detail_riwayat';
     protected $guarded = [];
+
+    public function pesanan_riwayat()
+    {
+        return $this->belongsTo(PesananRiwayat::class, 'pesanan_riwayat_id', 'id');
+    }
 }

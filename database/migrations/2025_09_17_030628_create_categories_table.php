@@ -18,12 +18,28 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->timestamps();
         });
-        DB::table('categories')->insert([
-            'name' => 'Food',
-            'slug' => 'food',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $categories = [
+            [
+                'id' => 1,
+                'name' => 'Coffee',
+                'slug' => 'coffee',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 2,
+                'name' => 'Drinks',
+                'slug' => 'drinks',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+        //Pesanan gagal disimpan!SQLSTATE[42S22]: Column not found: 1054 Unknown column 'category_id' in 'field list' (Connection: mysql, SQL: insert into `pesanan_detail_riwayat` (`pesanan_riwayat_id`, `nama_menu`, `category_id`, `nama_kategori`, `harga`, `jumlah`, `updated_at`, `created_at`) values (1, mollitia, 2, Drinks, 26248.00, 8, 2025-10-04 07:46:04, 2025-10-04 07:46:04))
+
+        if (!DB::table('categories')->insert($categories)) {
+            throw new \Exception('Gagal menambahkan data categories');
+        }
     }
 
     /**

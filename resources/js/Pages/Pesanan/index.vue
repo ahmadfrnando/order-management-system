@@ -6,6 +6,7 @@ import ProductCard from "./Partials/ProductCard.vue";
 import { useCurrency } from "@/Composables/useCurrency";
 import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
+import DangerButton from "@/Components/ui/DangerButton.vue";
 
 const { formatCurrency } = useCurrency();
 
@@ -67,8 +68,16 @@ const hapusProduk = (index) => {
                             >({{ pesananLocal.nama_pemesan }})</span
                         >
                     </h2>
+                    <div class="mt-2 flex gap-4">
+                        <p class="text-gray-500">
+                            No Pesanan: {{ pesananLocal.no_pesanan }}
+                        </p>
+                        <p class="text-gray-500">
+                            {{ pesananLocal.tanggal }} {{ pesananLocal.jam }}
+                        </p>
+                    </div>
                     <p class="text-gray-500">
-                        No Pesanan: {{ pesananLocal.no_pesanan }}
+                        Catatan : {{ pesananLocal.catatan }}
                     </p>
                 </div>
                 <span class="font-bold text-2xl md:text-4xl text-custom-yellow">
@@ -96,12 +105,19 @@ const hapusProduk = (index) => {
                         <i class="fas fa-pencil-alt mr-2"></i> Ubah Pesanan
                     </SecondaryButton>
                 </Link>
-                <PrimaryButton
-                    @click="updatePesananSelesai"
-                    :disabled="isLoading"
-                >
-                    <i class="fas fa-check-double mr-2"></i> Pesanan Selesai
-                </PrimaryButton>
+                <div class="flex gap-3">
+                    <Link :href="route('dashboard')">
+                        <DangerButton>
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali
+                        </DangerButton>
+                    </Link>
+                    <PrimaryButton
+                        @click="updatePesananSelesai"
+                        :disabled="isLoading"
+                    >
+                        <i class="fas fa-check-double mr-2"></i> Pesanan Selesai
+                    </PrimaryButton>
+                </div>
             </div>
         </div>
     </AuthenticatedLayoutCustom>

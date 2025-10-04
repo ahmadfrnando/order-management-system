@@ -4,8 +4,9 @@ import { useDate } from "@/Composables/useDate";
 import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
 const { formatCurrency } = useCurrency();
 const { formatDate } = useDate();
+import { Link } from "@inertiajs/vue3";
 
-const props =  defineProps({
+const props = defineProps({
     riwayat: { type: Object, required: true },
 });
 
@@ -33,10 +34,9 @@ console.log(props.riwayat);
                 }}</span>
             </div>
             <div class="p-3">
-                <SecondaryButton
-                >
-                    Order details
-                </SecondaryButton>
+                <Link :href="route('riwayat.show', props.riwayat.id)">
+                    <SecondaryButton> Order details </SecondaryButton>
+                </Link>
             </div>
         </div>
     </div>

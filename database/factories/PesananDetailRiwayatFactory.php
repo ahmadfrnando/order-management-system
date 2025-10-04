@@ -21,8 +21,10 @@ class PesananDetailRiwayatFactory extends Factory
         $pesananDetail = PesananDetail::find(1);
         return [
             'pesanan_riwayat_id' => 1,
-            'menu_id' => Menu::find(1)->id,
             'nama_menu' => Menu::find(1)->name,
+            'menu_id' => Menu::find(1)->id,
+            'kategori_id' => Menu::find(1)->kategori_id,
+            'nama_kategori' => Menu::find(1)->kategori->name,
             'jumlah' => $pesananDetail->jumlah,
             'harga' => $pesananDetail->harga
         ];

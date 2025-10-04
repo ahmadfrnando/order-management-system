@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             PesananSeeder::class,
             PesananDetailSeeder::class,
-            // PesananRiwayatSeeder::class,
+            PesananRiwayatSeeder::class,
             // PesananDetailRiwayatSeeder::class
         ]);
 

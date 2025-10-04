@@ -24,7 +24,7 @@ class PesananDetailRiwayatFactory extends Factory
             'nama_menu' => Menu::find(1)->name,
             'menu_id' => Menu::find(1)->id,
             'kategori_id' => Menu::find(1)->kategori_id,
-            'nama_kategori' => Menu::find(1)->kategori->name,
+            'nama_kategori' => Menu::find(1)->cetegory->name,
             'jumlah' => $pesananDetail->jumlah,
             'harga' => $pesananDetail->harga
         ];

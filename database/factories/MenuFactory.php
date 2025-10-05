@@ -18,7 +18,6 @@ class MenuFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'slug' => $this->faker->slug(),
             'description' => $this->faker->sentence(),
             'price' => $this->faker->numberBetween(10000, 50000),
             'category_id' => $this->faker->numberBetween(1, 2),

@@ -10,6 +10,10 @@ const props = defineProps({
     menu: Array,
     required: true,
     default: () => [],
+}, {
+    categories: Array,
+    required: true,
+    default: () => [],
 });
 
 function edit(Menu) {

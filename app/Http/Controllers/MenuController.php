@@ -15,8 +15,10 @@ class MenuController extends Controller
     public function index(): Response
     {
         $menu = Menu::all();
+        $categories = Menu::all();
         return Inertia::render('Menu/Index', [
             'menu' => $menu,
+            'categories' => $categories,
         ]);
     }
 

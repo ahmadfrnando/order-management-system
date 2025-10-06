@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PesananBaruDibuat;
 use App\Models\Menu;
 use App\Models\Pesanan;
 use App\Models\PesananDetail;
@@ -81,7 +82,6 @@ class HomeController extends Controller
             }
 
             DB::commit();
-
             return redirect()->route('home')->with([
                 'flash' => [
                     'type' => 'success',

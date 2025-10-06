@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
 
     //riwayat pesanan
     Route::resource('/dashboard/riwayat', PesananRiwayatController::class)->only(['index', 'show']);
+    Route::get('/dashboard/riwayat/{pesanan}/cetak', [PesananRiwayatController::class, 'cetak'])->name('riwayat.cetak');
     Route::resource('/dashboard/menu', MenuController::class);
     Route::put('/dashboard/menu/{menu}/set-best-seller', [MenuController::class, 'setBestSeller'])->name('menu.setBestSeller');
     Route::put('/dashboard/menu/{menu}/set-available', [MenuController::class, 'setAvailable'])->name('menu.setAvailable');

@@ -26,6 +26,11 @@ const customer = ref({
 const handleSubmit = () => {
     isDisabled.value = true;
     emit("submit", customer.value);
+    customer.value = {
+        nama_pemesan: "",
+        no_meja: "",
+        catatan: "",
+    };
 };
 </script>
 <template>

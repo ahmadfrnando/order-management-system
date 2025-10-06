@@ -1,11 +1,24 @@
 <script setup>
-import { watch } from "vue";
-import { Link, Head, usePage } from "@inertiajs/vue3";
+import { watch, onMounted, computed } from "vue";
+import { Link, Head, usePage, router } from "@inertiajs/vue3";
 import SidebarLink from "@/Components/SidebarLink.vue";
 import { useToast } from '@/Composables/useToast';
+import { useCurrency } from "@/Composables/useCurrency";
+
+const { formatCurrency } = useCurrency()
+
+
+onMounted(() => {
+  setInterval(() => {
+    router.reload({ only: ['global'] })
+  }, 1000)
+})
 
 const page = usePage()
 const { toast } = useToast()
+
+const totalPesanan = computed(() => page.props.global.total_pesanan)
+const totalHarga = computed(() => page.props.global.total_harga)
 
 watch(
   () => page.props.flash,
@@ -96,7 +109,7 @@ const sidebarMenu = [
                 <button
                     class="font-bold rounded-full bg-white mr-2 py-2 px-3 shadow sm:block hidden cart"
                 >
-                    <i class="fas fa-shopping-basket"></i> 8 items - $17.50
+                    <i class="fas fa-shopping-basket"></i> {{ totalPesanan }} items - {{ formatCurrency(totalHarga) }}
                 </button>
                 <Link
                     :href="route('logout')"
@@ -109,7 +122,7 @@ const sidebarMenu = [
             <button
                 class="font-bold rounded-full bg-white mr-2 py-2 px-3 shadow block sm:hidden mt-5 w-full cart"
             >
-                <i class="fas fa-shopping-basket mr-3"></i> 8 items - $17.50
+                <i class="fas fa-shopping-basket mr-3"></i> {{ totalPesanan }} items - {{ formatCurrency(totalHarga) }}
             </button>
             <slot />
         </main>

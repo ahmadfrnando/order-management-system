@@ -7,6 +7,7 @@ use App\Models\PesananRiwayat;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PesananRiwayatController extends Controller
 {
@@ -71,5 +72,11 @@ class PesananRiwayatController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function cetak(PesananRiwayat $pesanan)
+    {   
+        $pdf = Pdf::loadView('pdf.invoice', compact('pesanan'));
+        return $pdf->stream('invoice_' . $pesanan->id . '_' . $pesanan->nama_pemesan . '.pdf');
     }
 }

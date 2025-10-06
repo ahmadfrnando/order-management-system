@@ -140,7 +140,7 @@ class PesananController extends Controller
                 'total_item' => $totalItem
             ]);
             DB::commit();
-            return redirect()->route('dashboard')->with([
+            return redirect()->route('riwayat.show', [$pesanan->pesanan_riwayat->id])->with([
                 'flash' => [
                     'type' => 'success',
                     'message' => 'Pesanan telah selesai dibuat!'

@@ -38,6 +38,10 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn() => $request->session()->get('flash.message'),
                 'type' => fn() => $request->session()->get('flash.type'),
             ],
+            'global' => [
+                'total_pesanan' => \App\Models\Pesanan::where('is_done', false)->count() ?? 0,
+                'total_harga' => \App\Models\Pesanan::where('is_done', false)->sum('total_harga') ?? 0,
+            ]
         ];
     }
 }

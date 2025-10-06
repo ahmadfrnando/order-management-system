@@ -3,6 +3,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
 import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
+import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
 import { useCurrency } from "@/Composables/useCurrency";
 
 const { formatCurrency } = useCurrency();
@@ -125,12 +126,17 @@ console.log(
             </div>
 
             <!-- Tombol kembali -->
-            <div class="flex justify-start">
+            <div class="flex justify-between">
                 <Link :href="route('riwayat.index')">
                     <SecondaryButton>
                         <i class="fas fa-arrow-left mr-2"></i> Kembali
                     </SecondaryButton>
                 </Link>
+                <a :href="route('riwayat.cetak', riwayat.id)" target="_blank">
+                    <PrimaryButton>
+                        <i class="fas fa-print mr-2"></i> Cetak Struk
+                    </PrimaryButton>
+                </a>
             </div>
         </div>
     </AuthenticatedLayoutCustom>

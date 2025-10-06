@@ -2,10 +2,26 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
 import ProductCard from "./ProductCard.vue";
 import NoData from "@/Components/NoData.vue";
+
+
+let intervalId = null;
+
+onMounted(() => {
+    intervalId = setInterval(() => {
+    if (document.visibilityState === 'visible') {
+        router.reload({ only: ['pesanan'] });
+    }
+}, 1000);
+});
+
+onUnmounted(() => {
+    // Hentikan interval ketika komponen di-unmount agar tidak bocor
+    if (intervalId) clearInterval(intervalId);
+});
 
 const props = defineProps({
     pesanan: {
@@ -15,6 +31,12 @@ const props = defineProps({
 });
 
 const pesanan = ref(props.pesanan);
+watch(
+  () => props.pesanan,
+  (newVal) => {
+    pesanan.value = newVal
+  }
+)
 </script>
 
 <template>

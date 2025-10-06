@@ -53,6 +53,8 @@ Route::middleware('auth')->group(function () {
     //riwayat pesanan
     Route::resource('/dashboard/riwayat', PesananRiwayatController::class)->only(['index', 'show']);
     Route::resource('/dashboard/menu', MenuController::class);
+    Route::put('/dashboard/menu/{menu}/set-best-seller', [MenuController::class, 'setBestSeller'])->name('menu.setBestSeller');
+    Route::put('/dashboard/menu/{menu}/set-available', [MenuController::class, 'setAvailable'])->name('menu.setAvailable');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -14,7 +14,8 @@ defineProps({
         <!-- Badge Best Seller / Rekomendasi -->
         <div
             v-if="product.is_best_seller"
-            class="absolute top-3 left-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow"
+            class="absolute top-6 left-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow"
+            style="z-index: 1"
         >
             ⭐ Best Seller
         </div>
@@ -23,7 +24,7 @@ defineProps({
         <img
             :src="product.image"
             :alt="product.name"
-            class="w-full h-40 object-contain transform hover:scale-95 transition duration-300"
+            class="w-full h-40 mt-6 object-contain transform hover:scale-95 transition duration-300"
         />
 
         <!-- Detail Produk -->

@@ -17,6 +17,18 @@ watch(
   { immediate: true }
 )
 
+watch(
+    () => page.props.confirmation,
+    (confirmation) => {
+        if (confirmation?.message) {
+            if (confirm(confirmation.message)) {
+                window.location.href = confirmation.link
+            }
+        }
+    },
+    { immediate: true }
+)
+
 const sidebarMenu = [
   {
     name: "Pesanan",

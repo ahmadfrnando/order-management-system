@@ -20,7 +20,7 @@ const emit = defineEmits(["add"]);
         class="relative bg-white rounded-lg shadow-md p-3 hover:shadow-lg"
     >
         <img
-            :src="dataMenu.image"
+            :src="`/${dataMenu.image}`"
             alt="menu"
             width="200"
             height="200"

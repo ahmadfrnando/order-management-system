@@ -7,6 +7,7 @@ import { useCurrency } from "@/Composables/useCurrency";
 import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
 import SecondaryButton from "@/Components/ui/SecondaryButton.vue";
 import DangerButton from "@/Components/ui/DangerButton.vue";
+import Swal from "sweetalert2";
 
 const { formatCurrency } = useCurrency();
 
@@ -19,20 +20,33 @@ console.log(pesananLocal);
 
 function updatePesananSelesai() {
     isLoading.value = true;
-    router.patch(
-        `/dashboard/pesanan/${pesananLocal.value.id}/update`,
-        {
-            pesanan_detail: pesananLocal.value.pesanan_detail,
-        },
-        {
-            onSuccess: () => {
-                console.log("berhasil");
-            },
-            onError: (errors) => {
-                console.log(errors);
-            },
+    Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah anda yakin ingin menyelesaikan pesanan ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#C97C5D",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Saya Yakin!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.patch(
+                `/dashboard/pesanan/${pesananLocal.value.id}/update`,
+                {
+                    pesanan_detail: pesananLocal.value.pesanan_detail,
+                },
+                {
+                    onSuccess: () => {
+                        console.log("berhasil");
+                    },
+                    onError: (errors) => {
+                        console.log(errors);
+                    },
+                }
+            );
         }
-    );
+    });
 }
 
 // fungsi ubah jumlah

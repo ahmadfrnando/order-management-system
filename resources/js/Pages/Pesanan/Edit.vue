@@ -55,7 +55,7 @@ const menuDrink = props.menu.filter((menu) => menu.category_id === 2);
 function storePesananSelesai() {
     isLoading.value = true;
     clearCart();
-    router.post(route('pesanan.store'), {
+    router.post(route("pesanan.store"), {
         id: props.pesanan.id,
         pesanan_detail: cart.value,
     });
@@ -107,8 +107,6 @@ const addToCart = (menu) => {
         });
     }
 };
-
-console.log(cart.value);
 </script>
 
 <template>

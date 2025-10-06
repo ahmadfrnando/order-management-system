@@ -29,7 +29,7 @@ const emit = defineEmits(["tambah", "kurang", "hapus"]);
 
         <!-- gambar -->
         <img
-            :src="d.menu.image"
+            :src="`/${d.menu.image}`"
             alt="menu"
             width="200"
             height="200"

@@ -6,6 +6,7 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import AuthenticatedLayoutCustom from "@/Layouts/AuthenticatedLayoutCustom.vue";
 import ProductCard from "./ProductCard.vue";
 import NoData from "@/Components/NoData.vue";
+import Swal from "sweetalert2";
 
 
 let intervalId = null;
@@ -37,6 +38,33 @@ watch(
     pesanan.value = newVal
   }
 )
+
+function batalkanPesanan(id) {
+    Swal.fire({ 
+        title: "Konfirmasi",
+        text: "Apakah anda yakin ingin membatalkan pesanan ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#C97C5D",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Saya Yakin!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(
+                `/dashboard/pesanan/${id}`,
+                {
+                    onSuccess: () => {
+                        console.log("berhasil");
+                    },
+                    onError: (errors) => {
+                        console.log(errors);
+                    },
+                }
+            );
+        }
+    });
+}
 </script>
 
 <template>
@@ -52,6 +80,7 @@ watch(
                 v-for="(p, index) in pesanan"
                 :pesanan="p"
                 :key="index"
+                @batal="batalkanPesanan"
                 
             />
             <NoData v-else >Belum ada pesanan</NoData>

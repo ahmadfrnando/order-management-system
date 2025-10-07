@@ -163,6 +163,24 @@ class PesananController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $pesanan = Pesanan::findOrFail($id);
+        try {
+            $pesanan->pesanan_detail()->delete();
+            $pesanan->delete();
+            return redirect()->route('dashboard')->with([
+                'flash' => [
+                    'type' => 'success',
+                    'message' => 'Pesanan berhasil dibatalkan!'
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->route('dashboard')->with([
+                'flash' => [
+                    'type' => 'error',
+                    'message' => 'Pesanan gagal dibatalkan!' . $th->getMessage()
+                ]
+            ]);
+        }
     }
 }

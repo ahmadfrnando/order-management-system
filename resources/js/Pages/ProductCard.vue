@@ -8,6 +8,8 @@ import { Link } from "@inertiajs/vue3";
 defineProps({
     pesanan: { type: Object, required: true },
 });
+
+const emit = defineEmits(["batal"]);
 </script>
 <template>
     <div
@@ -64,7 +66,7 @@ defineProps({
                 Detail Pesanan
             </SecondaryButton>
         </Link>
-        <DangerButton class="w-full mt-5 flex justify-center">
+        <DangerButton class="w-full mt-5 flex justify-center" @click="emit('batal', pesanan.id)">
             <i class="fas fa-trash mr-2"></i>
             Batalkan Pesanan
         </DangerButton>

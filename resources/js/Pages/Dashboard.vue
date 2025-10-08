@@ -11,13 +11,13 @@ import Swal from "sweetalert2";
 
 let intervalId = null;
 
-onMounted(() => {
-    intervalId = setInterval(() => {
-    if (document.visibilityState === 'visible') {
-        router.reload({ only: ['pesanan'] });
-    }
-}, 1000);
-});
+// onMounted(() => {
+//     intervalId = setInterval(() => {
+//     if (document.visibilityState === 'visible') {
+//         router.reload({ only: ['pesanan'] });
+//     }
+// }, 1000);
+// });
 
 onUnmounted(() => {
     // Hentikan interval ketika komponen di-unmount agar tidak bocor

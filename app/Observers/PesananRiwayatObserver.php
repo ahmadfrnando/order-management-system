@@ -28,7 +28,7 @@ class PesananRiwayatObserver
                         'jumlah'      => $value->jumlah
                     ]);
                 } else {
-                    $pesananRiwayat->update([
+                    $pesananRiwayat->pesanan_detail_riwayat()->update([
                         'pesanan_riwayat_id'   => $pesananRiwayat->id,
                         'nama_menu'      => $value->nama_menu,
                         'menu_id'      => $value->menu_id,

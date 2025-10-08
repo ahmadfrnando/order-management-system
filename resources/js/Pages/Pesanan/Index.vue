@@ -64,6 +64,8 @@ const kurangJumlah = (detail) => {
 const hapusProduk = (index) => {
     pesananLocal.value.pesanan_detail.splice(index, 1);
 };
+
+const isEditable = ref(false);
 </script>
 
 <template>
@@ -106,6 +108,7 @@ const hapusProduk = (index) => {
                     :key="detail.id"
                     :pesanan="detail"
                     :index="index"
+                    :editable="isEditable"
                     @tambah="tambahJumlah(detail)"
                     @kurang="kurangJumlah(detail)"
                     @hapus="hapusProduk(index)"
@@ -114,7 +117,9 @@ const hapusProduk = (index) => {
 
             <!-- tombol tambah produk -->
             <div class="mt-8 flex justify-between">
-                <Link :href="route('pesanan.edit', pesananLocal.id)">
+                <Link
+                    :href="route('pesanan.edit', pesananLocal.id)"
+                >
                     <SecondaryButton>
                         <i class="fas fa-pencil-alt mr-2"></i> Ubah Pesanan
                     </SecondaryButton>

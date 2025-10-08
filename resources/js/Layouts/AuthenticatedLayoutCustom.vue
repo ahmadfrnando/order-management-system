@@ -8,11 +8,11 @@ import { useCurrency } from "@/Composables/useCurrency";
 const { formatCurrency } = useCurrency()
 
 
-onMounted(() => {
-  setInterval(() => {
-    router.reload({ only: ['global'] })
-  }, 1000)
-})
+// onMounted(() => {
+//   setInterval(() => {
+//     router.reload({ only: ['global'] })
+//   }, 1000)
+// })
 
 const page = usePage()
 const { toast } = useToast()

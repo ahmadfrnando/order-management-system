@@ -66,7 +66,6 @@ class PesananController extends Controller
             $totalItem = $pesanan->pesanan_detail()->sum('jumlah');    
             $pesanan->update([
                 'total_harga' => $totalHarga,
-                'is_done' => true,
                 'total_item' => $totalItem
             ]);
             DB::commit();

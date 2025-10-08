@@ -9,6 +9,8 @@ import { useToast } from "@/Composables/useToast";
 import ProductCard from "@/Components/ProductCard.vue";
 import { useCart } from "@/Composables/useCart";
 import CustomerDetailModal from "@/Components/CustomerDetailModal.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
 
 const page = usePage();
 const { toast } = useToast();
@@ -58,12 +60,6 @@ watch(
 const activeModal = ref(null);
 const openModal = (modal) => (activeModal.value = modal);
 const closeModal = () => (activeModal.value = null);
-// onMounted(() => {
-//     const savedCart = localStorage.getItem("cart");
-//     if (savedCart) {
-//         cart.value = JSON.parse(savedCart);
-//     }
-// });
 
 defineProps({
     coffees: {
@@ -78,46 +74,9 @@ defineProps({
     },
 });
 
-// const cart = ref([]);
-// function addToCart(items) {
-//     const item = cart.value.find((c) => c.name === items.name);
-//     if (item) {
-//         item.qty += 1;
-//     } else {
-//         cart.value.push({
-//             ...items,
-//             qty: 1,
-//         });
-//     }
-// }
-
-// watch(
-//     cart,
-//     (newVal) => {
-//         localStorage.setItem("cart", JSON.stringify(newVal));
-//     },
-//     { deep: true }
-// );
-
-// const totalQty = computed(() => {
-//     return cart.value.reduce((sum, item) => sum + item.qty, 0);
-// });
-
-// function submitOrder() {
-//     form.items = cart.value;
-
-//     form.post("/orders", {
-//         onSuccess: () => {
-//             form.reset();
-//             cart.value = [];
-//             closeModal("ordering");
-//             closeModal("customer");
-//         },
-//         onError: (errors) => {
-//             console.error(errors);
-//         },
-//     });
-// }
+const totalQtyHistory = computed(() => {
+    
+})
 </script>
 
 <template>
@@ -167,6 +126,7 @@ defineProps({
             </div>
             <div class="ml-auto font-bold">
                 <button
+                    @click="openModal('ordering')"
                     class="relative font-bold rounded-full bg-custom-secondary py-2 px-5 ml-2"
                 >
                     <i class="fas fa-cart-plus"></i>
@@ -261,59 +221,82 @@ defineProps({
         </div>
     </section>
     <!--contact start-->
-    <section id="contact">
-        <div
-            class="bottom-0 left-0 right-0 bg-custom-primary py-20 text-center text-custom-light"
-            id="contact"
-        >
-            <span class="mt-12 font-bold text-5xl">Drop us a line</span>
-            <form class="mt-10 w-1/2 mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                    <input
-                        type="text"
-                        class="rounded-lg bg-gray-200 p-2"
-                        placeholder="name"
-                    />
-                    <input
-                        type="text"
-                        class="rounded-lg bg-gray-200 p-2"
-                        placeholder="email"
-                    />
+    <!-- contact start -->
+    <section id="contact" class="bg-custom-primary text-custom-light py-20">
+        <div class="container mx-auto px-6 text-center">
+            <!-- Judul -->
+            <h2 class="text-5xl font-bold mb-10">Temukan Kami</h2>
+
+            <!-- Profil Café -->
+            <div class="max-w-3xl mx-auto mb-12">
+                <p class="text-lg leading-relaxed text-gray-200">
+                    <strong>The Secret</strong> adalah tempat yang nyaman untuk
+                    menikmati kopi terbaik dan makanan ringan berkualitas. Kami
+                    berkomitmen menghadirkan suasana hangat dan pelayanan ramah
+                    untuk setiap pelanggan kami.
+                </p>
+            </div>
+
+            <!-- Kontak & Info -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left max-w-5xl mx-auto mb-16"
+            >
+                <div>
+                    <h3 class="text-2xl font-semibold mb-3">Alamat</h3>
+                    <p class="text-gray-200">
+                        Jl. Melati No. 25, Sukajadi<br />
+                        Bandung, Jawa Barat 40161
+                    </p>
                 </div>
-                <div class="mt-10">
-                    <textarea
-                        class="rounded-lg bg-gray-200 p-2 w-full h-screen-25"
-                        placeholder="message"
-                    ></textarea>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-3">Hubungi Kami</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li>📞 0812-3456-7890</li>
+                        <li>📧 cafeharmoni@gmail.com</li>
+                        <li>
+                            📸
+                            <a
+                                href="https://instagram.com/cafeharmoni"
+                                target="_blank"
+                                class="underline hover:text-custom-secondary"
+                                >@cafeharmoni</a
+                            >
+                        </li>
+                    </ul>
                 </div>
-                <div class="mt-6">
-                    <button
-                        type="submit"
-                        class="text-white text-xl hover:shadow-lg rounded-lg bg-custom-secondary px-5 py-2"
-                    >
-                        Send
-                    </button>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-3">Jam Operasional</h3>
+                    <ul class="space-y-2 text-gray-200">
+                        <li>Senin – Jumat: 08.00 – 22.00</li>
+                        <li>Sabtu – Minggu: 09.00 – 23.00</li>
+                    </ul>
                 </div>
-            </form>
-            <hr class="mt-20 bg-gray-200 w-2/3 mx-auto" />
-            <div class="flex justify-center w-2/3 mx-auto">
-                <div class="font-bold mt-10 mr-auto">
-                    <span class="mx-5">
-                        <a href="shortcodes.html"> Shrotcodes </a>
-                    </span>
-                    <span class="mx-5">
-                        <a href="documentation.html"> Documentation </a>
-                    </span>
-                    <span class="mx-5">
-                        <a href="https://github.com/panbak" target="_blank">
-                            Author
-                        </a>
-                    </span>
-                </div>
-                <div class="font-bold mt-10 ml-auto">&copy; Panos Bakas</div>
+            </div>
+
+            <!-- Google Maps Embed -->
+            <div class="w-full max-w-5xl mx-auto">
+                <iframe
+                    class="w-full h-96 rounded-lg shadow-lg"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.8475588010633!2d110.36094741477733!3d-7.810849579736458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a577fcba441b1%3A0x1234567890abcdef!2sCafe%20Harmoni!5e0!3m2!1sid!2sid!4v1696750000000!5m2!1sid!2sid"
+                    style="border: 0"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+            </div>
+
+            <!-- Footer kecil -->
+            <hr class="mt-16 mb-6 bg-gray-400 opacity-30 w-2/3 mx-auto" />
+            <div class="text-sm text-gray-300">
+                &copy; {{ new Date().getFullYear() }} The Secret — All Rights
+                Reserved
             </div>
         </div>
     </section>
+    <!-- contact end -->
+
     <!--contact end-->
 </template>
 

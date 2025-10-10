@@ -25,7 +25,7 @@ watch(
   { deep: true }
 );
 
-const emit = defineEmits(["edit", "setBestSeller", "setAvailable"]);
+const emit = defineEmits(["edit", "setBestSeller", "setAvailable", "hapus"]);
 
 // console.log(dataMenu.image);
 
@@ -62,8 +62,11 @@ const closeModal = () => (activeModal.value = null);
             <span class="block text-yellow-600 mt-2 font-bold text-2xl">
                 {{ formatCurrency(dataMenu.price) }}
             </span>
-            <p class="text-sm text-gray-500 mt-2" v-if="dataMenu.description.length <= 100">
+            <p class="text-sm text-gray-500 mt-2" v-if="dataMenu.description && dataMenu.description.length <= 100">
                 {{ dataMenu.description }}
+            </p>
+            <p class="text-sm text-gray-500 mt-2" v-else-if="dataMenu.description == null">
+                ...
             </p>
             <p class="text-sm text-gray-500 mt-2" v-else>
                 {{ dataMenu.description.slice(0, 100) + '...' }}

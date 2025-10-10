@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('harga', 12, 2);
             $table->integer('jumlah');
             $table->timestamps();
+
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

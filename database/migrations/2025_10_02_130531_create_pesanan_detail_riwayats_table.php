@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('pesanan_detail_riwayat', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pesanan_riwayat_id');
-            $table->string('menu_id');
+            $table->unsignedBigInteger('menu_id');
             $table->string('nama_menu');
             $table->unsignedBigInteger('kategori_id');
             $table->string('nama_kategori');
             $table->decimal('harga', 12, 2);
             $table->integer('jumlah');
             $table->timestamps();
+
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade')->onUpdate('cascade');
+
         });
     }
 

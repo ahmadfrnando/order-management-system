@@ -6,6 +6,7 @@ import MenuCard from "./Partials/MenuCard.vue";
 import Modal from "./Partials/Modal.vue";
 import { useCurrency } from "@/Composables/useCurrency";
 import PrimaryButton from "@/Components/ui/PrimaryButton.vue";
+import Swal from "sweetalert2";
 
 const props = defineProps(
     {
@@ -53,7 +54,34 @@ const openModalEdit = (menu) => {
     activeModal.value = "menu";
 };
 
-const closeModal = () => (activeModal.value = null);
+const hapusMenu = (menu) => {
+    Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah anda yakin ingin menghapus menu ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#C97C5D",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Saya Yakin!",
+        cancelButtonText: "Batal",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            router.delete(
+                route("menu.destroy", menu.id),
+                {
+                    onFinish: () => {
+                        router.reload({ only: ["menu"] });
+                    },
+                }
+            );
+        }
+    });
+}
+
+const closeModal = () => {
+    activeModal.value = null;
+    form.reset();
+};
 
 const menuCoffees = computed(() =>
     props.menu.filter((item) => item.category_id === 1)
@@ -81,8 +109,10 @@ function handleSubmitMenu(menuData) {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
+                form.reset();
                 closeModal();
                 router.reload({ only: ["menu"] });
+                
             },
             onError: (errors) => {
                 console.log(errors);
@@ -90,11 +120,16 @@ function handleSubmitMenu(menuData) {
         });
         return;
     } else {
-        form.post("/dashboard/menu", {
+        console.log('test nambah menu');
+        form.transform((data) => ({
+            ...data,
+            _method: "POST", // Laravel butuh ini
+        })).post("/dashboard/menu", {
             preserveScroll: true,
             forceFormData: true,
             onSuccess: () => {
-                closeModal("menu");
+                form.reset();
+                closeModal();
                 router.reload({ only: ["menu"] });
             },
         });
@@ -131,6 +166,7 @@ function handleSubmitMenu(menuData) {
                     :key="item.id"
                     :menu="item"
                     @edit="openModalEdit(item)"
+                    @hapus="hapusMenu(item)"
                 />
             </div>
         </div>
@@ -144,6 +180,7 @@ function handleSubmitMenu(menuData) {
                     :key="item.id"
                     :menu="item"
                     @edit="openModalEdit(item)"
+                    @hapus="hapusMenu(item)"
                 />
             </div>
         </div>

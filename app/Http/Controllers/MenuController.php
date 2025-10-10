@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\TryCatch;
 
 class MenuController extends Controller
 {
@@ -133,7 +134,22 @@ class MenuController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        //
+    {   
+        try {
+            $menu = Menu::findOrFail($id)->delete();
+            return redirect()->back()->with([
+                    'flash' => [
+                        'type' => 'success',
+                        'message' => 'Menu telah berhasil dihapus!'
+                    ]
+                ]);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with([
+                'flash' => [
+                    'type' => 'error',
+                    'message' => 'Terjadi kesalahan saat menghapus menu: ' . $th->getMessage()
+                ]
+            ]);
+        }
     }
 }

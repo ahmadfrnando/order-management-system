@@ -85,6 +85,7 @@ function onInput(e) {
 }
 
 const handleSubmit = () => {
+    imagePreview.value = null;
     isDisabled.value = true;
     emit("submit", menu.value);
     isDisabled.value = false;
@@ -160,6 +161,7 @@ function handleChange(event) {
                             id="description"
                             class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             v-model="menu.description"
+                            required
                         ></textarea>
                     </div>
                     <div class="mt-2">
